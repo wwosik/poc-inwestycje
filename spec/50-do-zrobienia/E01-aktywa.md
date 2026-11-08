@@ -20,21 +20,26 @@ też pierwszy trwały zapis danych w aplikacji.
 | [E01-S01](E01-S01-lista-i-dodawanie-aktywow.md) | Lista aktywów i dodawanie aktywa | do zrobienia |
 
 Poza zakresem tego epica (kandydaci na kolejne stories, jeśli będą potrzebne): edycja i usuwanie
-aktywa, transakcje, wycena rynkowa, przeliczanie walut.
+aktywa, endpointy API, transakcje, wycena rynkowa, przeliczanie walut.
 
 ## Decyzje wspólne dla obszaru
 
-Propozycje — do potwierdzenia w otwartych pytaniach.
-
-1. **Trwały zapis: SQLite przez EF Core.** Plik bazy `portfel.db` w katalogu danych z `AppPaths`
-   (`data/`). Schemat zarządzany migracjami EF Core, aplikowanymi automatycznie przy starcie.
-   SQLite nie wymaga osobnego serwera i pasuje do aplikacji jednoosobowej; EF Core daje migracje
-   na kolejne epics (transakcje, wyceny).
-2. **Kwoty jako `decimal`**, nigdy `double`. Waluta jako trzyliterowy kod ISO 4217 (`PLN`, `USD`,
-   `EUR`).
-3. **Nazwy w kodzie i bazie po angielsku**: encja `Asset`, tabela `Assets`, kolumny `Name`,
-   `Kind`, `NominalValue`, `Currency`, `CreatedAt`.
-4. **Format liczb w UI po polsku** (`1 234,56`), także przy wpisywaniu — kultura żądań `pl-PL`.
+1. **Wartość nominalna to jedna kwota wpisywana przez użytkownika** — ile według niego aktywo
+   jest warte albo ile w nie włożył. Aplikacja niczego z niej nie wylicza.
+2. **Trwały zapis: plik JSON** `data/assets.json` w katalogu danych z `AppPaths`. Zapis
+   atomowy (plik tymczasowy obok, potem podmiana), dostęp przez jeden singleton z blokadą.
+   Plik ma pole `version`, żeby późniejsza zmiana formatu albo przejście na bazę miało od czego
+   się odbić.
+3. **Kwoty jako `decimal`**, nigdy `double`. **Waluta per aktywo** jako trzyliterowy kod
+   ISO 4217; obsługiwane: `PLN`, `EUR`, `USD`, `GBP`, `CHF`, domyślnie `PLN`. Sumy liczone
+   osobno dla każdej waluty, bez przeliczania kursów.
+4. **Rodzaj aktywa** z zamkniętej listy: Akcje, Obligacje, Fundusz / ETF, Lokata, Gotówka,
+   Nieruchomość, Kryptowaluty, Inne.
+5. **Nazwy w kodzie i w pliku danych po angielsku**: `Asset`, `AssetKind`, `Name`, `Kind`,
+   `NominalValue`, `Currency`, `Identifier`, `Note`, `CreatedAt`.
+6. **Format liczb w UI po polsku** (`1 234,56`), także przy wpisywaniu — kultura żądań `pl-PL`.
+7. **Na razie bez API** — tylko Razor Pages. Endpointy dojdą na tym samym serwisie, gdy będą
+   potrzebne.
 
 ## Kryteria akceptacji
 
@@ -44,17 +49,13 @@ Propozycje — do potwierdzenia w otwartych pytaniach.
 
 ## Otwarte pytania
 
-1. Co znaczy „wartość nominalna" w tym portfelu? Propozycja: kwota, którą użytkownik sam wpisuje
-   jako wartość aktywa (np. ile włożył albo ile jest warte według niego), bez żadnego
-   automatycznego wyliczania. Alternatywa: wartość nominalna w sensie papierów dłużnych (np.
-   obligacja o nominale 100 zł × liczba sztuk) — wtedy potrzebne byłyby dwa pola.
+1. Co znaczy „wartość nominalna" w tym portfelu?
 
->
+> Jedna kwota wpisywana przez użytkownika, bez wyliczania.
 
-2. Czy SQLite + EF Core jest w porządku jako magazyn danych? Alternatywa: plik JSON w `data/` —
-   prostszy dziś, ale bez migracji i zapytań, gdy dojdą transakcje.
+2. Czy SQLite + EF Core jest w porządku jako magazyn danych? Alternatywa: plik JSON w `data/`.
 
->
+> Plik JSON w `data/`.
 
 ## Uwagi
 
