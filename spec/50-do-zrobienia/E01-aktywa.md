@@ -17,7 +17,7 @@ też pierwszy trwały zapis danych w aplikacji.
 
 | Story | Tytuł | Stan |
 | ----- | ----- | ---- |
-| [E01-S01](../55-w-toku/opus-1/E01-S01-lista-i-dodawanie-aktywow.md) | Lista aktywów i dodawanie aktywa | w trakcie (opus-1) |
+| [E01-S01](../60-do-sprawdzenia/E01-S01-lista-i-dodawanie-aktywow.md) | Lista aktywów i dodawanie aktywa | w weryfikacji |
 
 Poza zakresem tego epica (kandydaci na kolejne stories, jeśli będą potrzebne): edycja i usuwanie
 aktywa, endpointy API, transakcje, wycena rynkowa, przeliczanie walut.

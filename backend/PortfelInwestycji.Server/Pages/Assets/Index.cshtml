@@ -1,0 +1,109 @@
+@page
+@model PortfelInwestycji.Server.Pages.Assets.IndexModel
+@using PortfelInwestycji.Server.Assets
+@{
+    ViewData["Title"] = "Aktywa";
+}
+
+<h1>Aktywa</h1>
+
+@if (Model.StatusMessage is not null)
+{
+    <p class="status" role="status">@Model.StatusMessage</p>
+}
+
+@if (Model.Assets.Count == 0)
+{
+    <p class="empty">Nie masz jeszcze żadnych aktywów. Dodaj pierwsze w formularzu poniżej.</p>
+}
+else
+{
+    <table class="assets">
+        <thead>
+            <tr>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Rodzaj</th>
+                <th scope="col" class="amount">Wartość nominalna</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var asset in Model.Assets)
+            {
+                <tr>
+                    <td>
+                        <span class="asset-name">@asset.Name</span>
+                        @if (asset.Identifier is not null)
+                        {
+                            <small class="asset-identifier">@asset.Identifier</small>
+                        }
+                        @if (asset.Note is not null)
+                        {
+                            <small class="asset-note">@asset.Note</small>
+                        }
+                    </td>
+                    <td>@asset.Kind.Label()</td>
+                    <td class="amount">@Amount.Format(asset.NominalValue, asset.Currency)</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            @foreach (var total in Model.Totals)
+            {
+                <tr>
+                    <th scope="row" colspan="2">Razem @total.Currency</th>
+                    <td class="amount">@Amount.Format(total.Total, total.Currency)</td>
+                </tr>
+            }
+        </tfoot>
+    </table>
+}
+
+<section class="add-asset" aria-labelledby="add-asset-heading">
+    <h2 id="add-asset-heading">Dodaj aktywo</h2>
+
+    <form method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+        <div class="field">
+            <label asp-for="Input.Name"></label>
+            <input asp-for="Input.Name" autocomplete="off" />
+            <span asp-validation-for="Input.Name" class="field-error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Input.Kind"></label>
+            <select asp-for="Input.Kind" asp-items="Model.KindOptions">
+                <option value="">Wybierz rodzaj</option>
+            </select>
+            <span asp-validation-for="Input.Kind" class="field-error"></span>
+        </div>
+
+        <div class="field-row">
+            <div class="field">
+                <label asp-for="Input.NominalValue"></label>
+                <input asp-for="Input.NominalValue" inputmode="decimal" autocomplete="off" placeholder="np. 1 234,56" />
+                <span asp-validation-for="Input.NominalValue" class="field-error"></span>
+            </div>
+
+            <div class="field">
+                <label asp-for="Input.Currency"></label>
+                <select asp-for="Input.Currency" asp-items="Model.CurrencyOptions"></select>
+                <span asp-validation-for="Input.Currency" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="field">
+            <label asp-for="Input.Identifier"></label>
+            <input asp-for="Input.Identifier" autocomplete="off" placeholder="opcjonalnie, np. CDR albo PLOPTTC00011" />
+            <span asp-validation-for="Input.Identifier" class="field-error"></span>
+        </div>
+
+        <div class="field">
+            <label asp-for="Input.Note"></label>
+            <textarea asp-for="Input.Note" rows="3" placeholder="opcjonalnie"></textarea>
+            <span asp-validation-for="Input.Note" class="field-error"></span>
+        </div>
+
+        <button type="submit">Dodaj aktywo</button>
+    </form>
+</section>

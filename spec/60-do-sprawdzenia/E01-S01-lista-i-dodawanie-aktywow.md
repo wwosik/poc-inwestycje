@@ -1,7 +1,7 @@
 # E01-S01 Lista aktywów i dodawanie aktywa
 
-> Status: w trakcie (opus-1)
-> Epic: [E01 Aktywa](../../50-do-zrobienia/E01-aktywa.md)
+> Status: w weryfikacji
+> Epic: [E01 Aktywa](../50-do-zrobienia/E01-aktywa.md)
 
 ## Podsumowanie
 
@@ -10,13 +10,13 @@ Pierwszy pionowy przekrój aplikacji: od pliku danych po interfejs.
 
 ## Kontekst
 
-- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
-  i layout z samym logo w nawigacji ([_Layout.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
+- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
+  i layout z samym logo w nawigacji ([_Layout.cshtml](../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
 - Nie ma żadnego trwałego zapisu ani modelu domeny. Katalog danych jest rozwiązywany przez
-  [AppPaths](../../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
+  [AppPaths](../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
 - Konwencje UI: Razor Pages, post formularza, bez frameworków CSS/JS, `PageModel` bez logiki
-  biznesowej ([ai/ui.md](../../../ai/ui.md)).
-- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](../../50-do-zrobienia/E01-aktywa.md).
+  biznesowej ([ai/ui.md](../../ai/ui.md)).
+- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](../50-do-zrobienia/E01-aktywa.md).
 
 ## Proponowane podejście
 
@@ -68,7 +68,7 @@ Format pliku `data/assets.json`:
    z jasnym komunikatem w logu; pliku nie nadpisujemy.
 2. **`AssetService`** — `ListAsync()` (sortowanie po nazwie, kultura `pl-PL`) i `AddAsync(...)`.
    Walidacja w DTO atrybutami, wszystkie błędy naraz (zgodnie z
-   [ai/standardy.md](../../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
+   [ai/standardy.md](../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
    je testować.
 3. **Strona `Pages/Assets/Index`** (`/Assets`):
    - Tabela: nazwa (pod nią mniejszym krojem ticker/ISIN i notatka, jeśli są), rodzaj, wartość
@@ -132,3 +132,54 @@ Format pliku `data/assets.json`:
 
 ## Uwagi
 
+
+## Notatki z implementacji
+
+### Co powstało
+
+- `backend/PortfelInwestycji.Server/Assets/` — `Asset`, `AssetKind` z polskimi etykietami,
+  `Currencies`, `Amount` (parsowanie i formatowanie kwot w `pl-PL`), `AssetInput` (dane
+  z formularza z walidacją atrybutami), `AssetStore` (plik `data/assets.json`), `AssetService`
+  (lista, dodawanie, sumy per waluta).
+- `Pages/Assets/Index` — tabela, sumy, stan pusty i formularz na jednej stronie; link „Aktywa"
+  w layoucie; style w `site.css` przez nowe zmienne `--surface`, `--danger`, `--success`
+  (zdefiniowane w obu motywach).
+- `Program.cs` — rejestracja serwisów, wczytanie pliku przy starcie, kultura `pl-PL` na sztywno,
+  polskie komunikaty bindera modeli.
+- Dokumentacja: [docs/aktywa.md](../../docs/aktywa.md); decyzje i pułapki w
+  [ai/pamięć.md](../../ai/pamięć.md).
+
+### Decyzje i odstępstwa od planu
+
+- **Wartość nominalna wiązana jako tekst**, nie `decimal`, i parsowana przez `Amount.TryParse`.
+  Dzięki temu błędny zapis kwoty jest zwykłym błędem walidacji po polsku, zgłaszanym razem
+  z innymi (zgodnie ze standardem „wszystkie błędy naraz").
+- **Dodatkowo przyjmowany zapis z kropką** (`1234.56`), gdy w tekście nie ma przecinka. W planie
+  go nie było; łatwo usunąć, jeśli przeszkadza.
+- **Wartość 0 jest dozwolona** (plan: „≥ 0"). `1,500` przechodzi jako 1,50 — liczą się
+  znaczące miejsca po przecinku, nie zera na końcu.
+- **Id to `Guid.CreateVersion7()`** — rośnie w czasie, więc kolejność w pliku odpowiada
+  kolejności dodawania.
+- **Plik w pamięci po starcie**: ręczna edycja `assets.json` przy działającej aplikacji zostanie
+  nadpisana przy następnym dodaniu. Opisane w docs.
+- **Nieznany `kind` w pliku** też blokuje start (JSON enum bez wartości liczbowych) — świadomie,
+  żeby literówka w ręcznej edycji nie zgubiła danych.
+- Komunikaty bindera modeli ustawione po polsku globalnie, bo zmanipulowana wartość `select`
+  (np. `Input.Kind=Spaceship`) daje błąd bindowania, a nie walidacji.
+- Testy piszą do `.tmp/tests/<losowy>/` w katalogu głównym repo (helper `TestDirectory`), nie do
+  systemowego katalogu tymczasowego. Istniejące `AppPathsTests` nadal używają
+  `Path.GetTempPath()` — nie ruszałem ich, bo to poza zakresem story.
+
+### Weryfikacja
+
+- `dotnet build` bez ostrzeżeń, `dotnet test`: 49/49 (parsowanie kwot, walidacja, zapis
+  i odczyt pliku, uszkodzone pliki, 25 równoległych dodań, sortowanie po polsku, sumy).
+- **Strony nie sprawdzałem w przeglądarce ani curlem** — człowiek pracował w tym czasie
+  interaktywnie i prosił, żeby nie uruchamiać testów, więc aplikacji też nie startowałem.
+  Do sprawdzenia ręcznie: wygląd tabeli i formularza w jasnym i ciemnym motywie, komunikat po
+  dodaniu, błędy przy polach, wpisanie `1 234,56`.
+
+### Luźne sprawy
+
+- Brak edycji i usuwania aktywa — kandydat na E01-S02.
+- Na wąskim ekranie tabela nie ma przewijania poziomego; przy długich nazwach zawija tekst.
