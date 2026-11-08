@@ -1,0 +1,15 @@
+@page
+@model ErrorModel
+@{
+    ViewData["Title"] = "Coś poszło nie tak";
+}
+
+<h1>Coś poszło nie tak</h1>
+
+<p>Błąd został zapisany w logach. Spróbuj ponownie, a jeśli będzie się powtarzał, zajrzyj do
+logów.</p>
+
+@if (Model.RequestId is not null)
+{
+    <p>Identyfikator żądania: <code>@Model.RequestId</code></p>
+}

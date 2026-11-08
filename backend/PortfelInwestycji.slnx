@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PortfelInwestycji.Server/PortfelInwestycji.Server.csproj" />
+  <Project Path="PortfelInwestycji.Server.Tests/PortfelInwestycji.Server.Tests.csproj" />
+</Solution>
