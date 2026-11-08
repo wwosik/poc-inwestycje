@@ -1,7 +1,7 @@
 # E01-S01 Lista aktywów i dodawanie aktywa
 
-> Status: w weryfikacji
-> Epic: [E01 Aktywa](../50-do-zrobienia/E01-aktywa.md)
+> Status: ukończone
+> Epic: [E01 Aktywa](E01-aktywa.md)
 
 ## Podsumowanie
 
@@ -10,13 +10,13 @@ Pierwszy pionowy przekrój aplikacji: od pliku danych po interfejs.
 
 ## Kontekst
 
-- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
-  i layout z samym logo w nawigacji ([_Layout.cshtml](../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
+- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
+  i layout z samym logo w nawigacji ([_Layout.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
 - Nie ma żadnego trwałego zapisu ani modelu domeny. Katalog danych jest rozwiązywany przez
-  [AppPaths](../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
+  [AppPaths](../../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
 - Konwencje UI: Razor Pages, post formularza, bez frameworków CSS/JS, `PageModel` bez logiki
-  biznesowej ([ai/ui.md](../../ai/ui.md)).
-- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](../50-do-zrobienia/E01-aktywa.md).
+  biznesowej ([ai/ui.md](../../../ai/ui.md)).
+- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](E01-aktywa.md).
 
 ## Proponowane podejście
 
@@ -68,7 +68,7 @@ Format pliku `data/assets.json`:
    z jasnym komunikatem w logu; pliku nie nadpisujemy.
 2. **`AssetService`** — `ListAsync()` (sortowanie po nazwie, kultura `pl-PL`) i `AddAsync(...)`.
    Walidacja w DTO atrybutami, wszystkie błędy naraz (zgodnie z
-   [ai/standardy.md](../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
+   [ai/standardy.md](../../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
    je testować.
 3. **Strona `Pages/Assets/Index`** (`/Assets`):
    - Tabela: nazwa (pod nią mniejszym krojem ticker/ISIN i notatka, jeśli są), rodzaj, wartość
@@ -95,18 +95,18 @@ Format pliku `data/assets.json`:
 
 ## Kryteria akceptacji
 
-- [ ] `/Assets` pokazuje wszystkie aktywa posortowane po nazwie, z rodzajem, wartością
+- [x] `/Assets` pokazuje wszystkie aktywa posortowane po nazwie, z rodzajem, wartością
       nominalną w polskim formacie oraz tickerem/ISIN i notatką, jeśli są.
-- [ ] Pod listą jest suma wartości dla każdej waluty osobno.
-- [ ] Przy braku aktywów widać stan pusty z instrukcją.
-- [ ] Formularz dodaje aktywo; po zapisie użytkownik wraca na listę i widzi komunikat i nowe
+- [x] Pod listą jest suma wartości dla każdej waluty osobno.
+- [x] Przy braku aktywów widać stan pusty z instrukcją.
+- [x] Formularz dodaje aktywo; po zapisie użytkownik wraca na listę i widzi komunikat i nowe
       aktywo.
-- [ ] Błędne dane pokazują wszystkie błędy naraz, przy polach, po polsku, bez utraty wpisanych
+- [x] Błędne dane pokazują wszystkie błędy naraz, przy polach, po polsku, bez utraty wpisanych
       wartości.
-- [ ] Wartość `1 234,56` i `1234,56` jest przyjmowana; wartość ujemna jest odrzucana.
-- [ ] Dane przetrwają restart; leżą w `data/assets.json`.
-- [ ] Link „Aktywa" w nawigacji.
-- [ ] Build i testy przechodzą.
+- [x] Wartość `1 234,56` i `1234,56` jest przyjmowana; wartość ujemna jest odrzucana.
+- [x] Dane przetrwają restart; leżą w `data/assets.json`.
+- [x] Link „Aktywa" w nawigacji.
+- [x] Build i testy przechodzą.
 
 ## Otwarte pytania
 
@@ -146,8 +146,8 @@ Format pliku `data/assets.json`:
   (zdefiniowane w obu motywach).
 - `Program.cs` — rejestracja serwisów, wczytanie pliku przy starcie, kultura `pl-PL` na sztywno,
   polskie komunikaty bindera modeli.
-- Dokumentacja: [docs/aktywa.md](../../docs/aktywa.md); decyzje i pułapki w
-  [ai/pamięć.md](../../ai/pamięć.md).
+- Dokumentacja: [docs/aktywa.md](../../../docs/aktywa.md); decyzje i pułapki w
+  [ai/pamięć.md](../../../ai/pamięć.md).
 
 ### Decyzje i odstępstwa od planu
 

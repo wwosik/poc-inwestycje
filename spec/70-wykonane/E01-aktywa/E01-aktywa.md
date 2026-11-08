@@ -1,6 +1,6 @@
 # E01 Aktywa
 
-> Status: w trakcie
+> Status: ukończone
 
 ## Cel
 
@@ -9,7 +9,7 @@ nominalną. Aktywa dodaje bezpośrednio w interfejsie, bez edycji plików ani wy
 
 ## Uzasadnienie
 
-Aktywo to podstawowy byt portfela — transakcje, wycena i wyniki (zob. [AGENTS.md](../../AGENTS.md))
+Aktywo to podstawowy byt portfela — transakcje, wycena i wyniki (zob. [AGENTS.md](../../../AGENTS.md))
 będą się do niego odwoływać. Bez listy aktywów nie ma na czym budować dalej. Ten epic wprowadza
 też pierwszy trwały zapis danych w aplikacji.
 
@@ -17,7 +17,7 @@ też pierwszy trwały zapis danych w aplikacji.
 
 | Story | Tytuł | Stan |
 | ----- | ----- | ---- |
-| [E01-S01](../60-do-sprawdzenia/E01-S01-lista-i-dodawanie-aktywow.md) | Lista aktywów i dodawanie aktywa | w weryfikacji |
+| [E01-S01](E01-S01-lista-i-dodawanie-aktywow.md) | Lista aktywów i dodawanie aktywa | ukończone |
 
 Poza zakresem tego epica (kandydaci na kolejne stories, jeśli będą potrzebne): edycja i usuwanie
 aktywa, endpointy API, transakcje, wycena rynkowa, przeliczanie walut.
@@ -43,9 +43,9 @@ aktywa, endpointy API, transakcje, wycena rynkowa, przeliczanie walut.
 
 ## Kryteria akceptacji
 
-- [ ] Użytkownik widzi listę swoich aktywów z wartością nominalną.
-- [ ] Użytkownik dodaje aktywo z poziomu interfejsu i widzi je od razu na liście.
-- [ ] Aktywa przetrwają restart aplikacji.
+- [x] Użytkownik widzi listę swoich aktywów z wartością nominalną.
+- [x] Użytkownik dodaje aktywo z poziomu interfejsu i widzi je od razu na liście.
+- [x] Aktywa przetrwają restart aplikacji.
 
 ## Otwarte pytania
 
