@@ -1,7 +1,7 @@
 # E01-S01 Lista aktywów i dodawanie aktywa
 
-> Status: do zrobienia
-> Epic: [E01 Aktywa](E01-aktywa.md)
+> Status: w trakcie (opus-1)
+> Epic: [E01 Aktywa](../../50-do-zrobienia/E01-aktywa.md)
 
 ## Podsumowanie
 
@@ -10,13 +10,13 @@ Pierwszy pionowy przekrój aplikacji: od pliku danych po interfejs.
 
 ## Kontekst
 
-- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
-  i layout z samym logo w nawigacji ([_Layout.cshtml](../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
+- Aplikacja ma dziś tylko pustą stronę główną ([Index.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Index.cshtml))
+  i layout z samym logo w nawigacji ([_Layout.cshtml](../../../backend/PortfelInwestycji.Server/Pages/Shared/_Layout.cshtml)).
 - Nie ma żadnego trwałego zapisu ani modelu domeny. Katalog danych jest rozwiązywany przez
-  [AppPaths](../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
+  [AppPaths](../../../backend/PortfelInwestycji.Server/Configuration/AppPaths.cs).
 - Konwencje UI: Razor Pages, post formularza, bez frameworków CSS/JS, `PageModel` bez logiki
-  biznesowej ([ai/ui.md](../../ai/ui.md)).
-- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](E01-aktywa.md).
+  biznesowej ([ai/ui.md](../../../ai/ui.md)).
+- Decyzje wspólne (JSON, waluty, rodzaje, brak API) są w epicu [E01](../../50-do-zrobienia/E01-aktywa.md).
 
 ## Proponowane podejście
 
@@ -68,7 +68,7 @@ Format pliku `data/assets.json`:
    z jasnym komunikatem w logu; pliku nie nadpisujemy.
 2. **`AssetService`** — `ListAsync()` (sortowanie po nazwie, kultura `pl-PL`) i `AddAsync(...)`.
    Walidacja w DTO atrybutami, wszystkie błędy naraz (zgodnie z
-   [ai/standardy.md](../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
+   [ai/standardy.md](../../../ai/standardy.md)). Sumy per waluta jako osobna metoda, żeby dało się
    je testować.
 3. **Strona `Pages/Assets/Index`** (`/Assets`):
    - Tabela: nazwa (pod nią mniejszym krojem ticker/ISIN i notatka, jeśli są), rodzaj, wartość
